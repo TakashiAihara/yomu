@@ -1,21 +1,23 @@
 FROM node:22-alpine AS base
 
+RUN corepack enable && corepack prepare pnpm@10.15.0 --activate
+
 WORKDIR /app
 
 FROM base AS deps
 
-COPY package.json package-lock.json* ./
-RUN npm ci --only=production
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile --prod
 
 FROM base AS build
 
-COPY package.json package-lock.json* ./
-RUN npm ci
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
 
 COPY tsconfig.json ./
 COPY src ./src
 
-RUN npm run build
+RUN pnpm run build
 
 FROM base AS runner
 

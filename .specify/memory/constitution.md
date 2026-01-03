@@ -1,17 +1,14 @@
 <!--
 Sync Impact Report:
-Version: 1.1.0 → 1.2.0
+Version: 1.2.0 → 1.3.0
 Changes:
-  - MINOR bump: Added test file naming conventions and co-location policy
+  - MINOR bump: Added Package Manager section mandating pnpm
+  - Specified: pnpm as required package manager (over npm/yarn)
+  - Updated last amended date: 2026-01-03
+Previous version (1.2.0):
+  - Added test file naming conventions and co-location policy
   - Added Test File Organization section with *.spec.ts (unit) and *.test.ts (integration) conventions
   - Added container-based integration testing and test execution policy
-  - Updated last amended date: 2026-01-03
-Previous version (1.1.0):
-  - Added Technical Constraints section with mandated technology stack
-  - Added Schema-First Development section
-  - Specified: Hono framework, Valkey, Vitest, gRPC+tRPC, Drizzle ORM, Biome, Clean Architecture
-  - Specified: Cloud Run deployment, Terraform IaC, cost-optimized observability
-  - Specified: Docusaurus for API docs, Schema-first workflow with PR approval
 Templates reviewed:
   ✅ .specify/templates/plan-template.md - No changes needed
   ✅ .specify/templates/spec-template.md - No changes needed
@@ -195,6 +192,14 @@ observability tools minimizes operational costs while maintaining visibility.
 **Rationale**: Biome provides faster linting and formatting with a single tool,
 reducing configuration complexity and build times.
 
+### Package Manager
+
+- **Package Manager**: pnpm (MUST use instead of npm/yarn)
+
+**Rationale**: pnpm provides faster installation times, efficient disk space usage
+through content-addressable storage, and strict dependency isolation that prevents
+phantom dependencies.
+
 ### CLI & Admin Interface
 
 - **CLI**: MUST be developed with tRPC integration
@@ -279,4 +284,4 @@ For runtime development guidance and agent-specific instructions, refer to:
 - `.claude/commands/` for AI assistant command definitions
 - Project README for general development guidelines
 
-**Version**: 1.2.0 | **Ratified**: 2026-01-02 | **Last Amended**: 2026-01-03
+**Version**: 1.3.0 | **Ratified**: 2026-01-02 | **Last Amended**: 2026-01-03
