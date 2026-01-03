@@ -24,13 +24,13 @@
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Initialize TypeScript project with package.json (Node.js 18+, TypeScript 5+)
-- [ ] T002 [P] Install dependencies: hono, @trpc/server, drizzle-orm, postgres, ioredis, zod
-- [ ] T003 [P] Install dev dependencies: vitest, drizzle-kit, biome, @types/node
-- [ ] T004 Configure Biome in biome.json with linting and formatting rules
-- [ ] T005 Create directory structure: src/auth/{domain,use-cases,infrastructure,presentation}, src/shared/{db,cache,logging}, tests/{unit,integration,contract,e2e}, infra/
-- [ ] T006 [P] Setup TypeScript configuration in tsconfig.json (strict mode, ES2022)
-- [ ] T007 [P] Create .env.example with required variables (GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, DATABASE_URL, VALKEY_URL, SESSION_SECRET)
+- [x] T001 Initialize TypeScript project with package.json (Node.js 18+, TypeScript 5+)
+- [x] T002 [P] Install dependencies: hono, @trpc/server, drizzle-orm, postgres, ioredis, zod
+- [x] T003 [P] Install dev dependencies: vitest, drizzle-kit, biome, @types/node
+- [x] T004 Configure Biome in biome.json with linting and formatting rules
+- [x] T005 Create directory structure: src/auth/{domain,use-cases,infrastructure,presentation}, src/shared/{db,cache,logging}, tests/{unit,integration,contract,e2e}, infra/
+- [x] T006 [P] Setup TypeScript configuration in tsconfig.json (strict mode, ES2022)
+- [x] T007 [P] Create .env.example with required variables (GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, DATABASE_URL, VALKEY_URL, SESSION_SECRET)
 
 ---
 
@@ -40,15 +40,15 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T008 Setup PostgreSQL connection in src/shared/db/client.ts with connection pooling
-- [ ] T009 [P] Setup Valkey (Redis-compatible) connection in src/shared/cache/client.ts with retry logic
-- [ ] T010 [P] Setup structured logger in src/shared/logging/logger.ts (JSON format, log levels, anonymization helper)
-- [ ] T011 Define Drizzle schema in src/shared/db/schema.ts (users table: id, google_id, email, display_name, profile_picture, created_at, last_sign_in_at)
-- [ ] T012 Define Drizzle schema in src/shared/db/schema.ts (sessions table: id, user_id, token, created_at, expires_at, last_activity_at, user_agent, ip_address_hash)
-- [ ] T013 Generate and apply database migrations using drizzle-kit
-- [ ] T014 [P] Create environment config loader in src/shared/config/env.ts (validates required env vars)
-- [ ] T015 [P] Setup Hono app in src/app.ts with tRPC middleware integration
-- [ ] T016 Create tRPC context and router setup in src/trpc.ts (publicProcedure, protectedProcedure)
+- [x] T008 Setup PostgreSQL connection in src/shared/db/client.ts with connection pooling
+- [x] T009 [P] Setup Valkey (Redis-compatible) connection in src/shared/cache/client.ts with retry logic
+- [x] T010 [P] Setup structured logger in src/shared/logging/logger.ts (JSON format, log levels, anonymization helper)
+- [x] T011 Define Drizzle schema in src/shared/db/schema.ts (users table: id, google_id, email, display_name, profile_picture, created_at, last_sign_in_at)
+- [x] T012 Define Drizzle schema in src/shared/db/schema.ts (sessions table: id, user_id, token, created_at, expires_at, last_activity_at, user_agent, ip_address_hash)
+- [x] T013 Generate and apply database migrations using drizzle-kit
+- [x] T014 [P] Create environment config loader in src/shared/config/env.ts (validates required env vars)
+- [x] T015 [P] Setup Hono app in src/app.ts with tRPC middleware integration
+- [x] T016 Create tRPC context and router setup in src/trpc.ts (publicProcedure, protectedProcedure)
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -64,42 +64,42 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T017 [P] [US1] Contract test for auth.initiateSignIn endpoint in tests/contract/auth-initiate-signin.test.ts
-- [ ] T018 [P] [US1] Contract test for auth.handleCallback endpoint in tests/contract/auth-handle-callback.test.ts
-- [ ] T019 [P] [US1] Integration test for Google OAuth token exchange in tests/integration/google-oauth.test.ts
-- [ ] T020 [P] [US1] Integration test for user creation flow in tests/integration/user-creation.test.ts
-- [ ] T021 [P] [US1] Integration test for session creation in tests/integration/session-flow.test.ts
-- [ ] T022 [US1] E2E test for complete sign-in journey in tests/e2e/oauth-signin.test.ts
+- [x] T017 [P] [US1] Contract test for auth.initiateSignIn endpoint in tests/contract/auth-initiate-signin.test.ts
+- [x] T018 [P] [US1] Contract test for auth.handleCallback endpoint in tests/contract/auth-handle-callback.test.ts
+- [x] T019 [P] [US1] Integration test for Google OAuth token exchange in tests/integration/google-oauth.test.ts
+- [x] T020 [P] [US1] Integration test for user creation flow in tests/integration/user-creation.test.ts
+- [x] T021 [P] [US1] Integration test for session creation in tests/integration/session-flow.test.ts
+- [x] T022 [US1] E2E test for complete sign-in journey in tests/e2e/oauth-signin.test.ts
 
 ### Implementation for User Story 1
 
 #### Domain Layer
 
-- [ ] T023 [P] [US1] Create User entity type in src/auth/domain/user.ts with validation functions
-- [ ] T024 [P] [US1] Create Session entity type in src/auth/domain/session.ts with token generation and expiration logic
+- [x] T023 [P] [US1] Create User entity type in src/auth/domain/user.ts with validation functions
+- [x] T024 [P] [US1] Create Session entity type in src/auth/domain/session.ts with token generation and expiration logic
 
 #### Infrastructure Layer
 
-- [ ] T025 [P] [US1] Implement Google OAuth client in src/auth/infrastructure/google-oauth.ts (generateAuthUrl, exchangeCodeForTokens, decodeIdToken functions)
-- [ ] T026 [P] [US1] Implement User repository in src/auth/infrastructure/user-repo.ts (findUserByGoogleId, createUser, updateLastSignIn using Drizzle)
-- [ ] T027 [P] [US1] Implement Session store in src/auth/infrastructure/session-store.ts (createSession, getSession, deleteSession with Valkey + DB sync)
+- [x] T025 [P] [US1] Implement Google OAuth client in src/auth/infrastructure/google-oauth.ts (generateAuthUrl, exchangeCodeForTokens, decodeIdToken functions)
+- [x] T026 [P] [US1] Implement User repository in src/auth/infrastructure/user-repo.ts (findUserByGoogleId, createUser, updateLastSignIn using Drizzle)
+- [x] T027 [P] [US1] Implement Session store in src/auth/infrastructure/session-store.ts (createSession, getSession, deleteSession with Valkey + DB sync)
 
 #### Use Cases Layer
 
-- [ ] T028 [US1] Implement initiateSignIn use case in src/auth/use-cases/initiate-signin.ts (generate OAuth URL, store state in Valkey with 10min TTL, create HMAC)
-- [ ] T029 [US1] Implement handleCallback use case in src/auth/use-cases/handle-callback.ts (validate state, exchange code, decode ID token, find/create user, create session, log event)
+- [x] T028 [US1] Implement initiateSignIn use case in src/auth/use-cases/initiate-signin.ts (generate OAuth URL, store state in Valkey with 10min TTL, create HMAC)
+- [x] T029 [US1] Implement handleCallback use case in src/auth/use-cases/handle-callback.ts (validate state, exchange code, decode ID token, find/create user, create session, log event)
 
 #### Presentation Layer
 
-- [ ] T030 [US1] Implement auth.initiateSignIn tRPC endpoint in src/auth/presentation/auth-router.ts with Zod input validation
-- [ ] T031 [US1] Implement auth.handleCallback tRPC endpoint in src/auth/presentation/auth-router.ts (handle user denial, Google unavailable, CSRF validation)
-- [ ] T032 [US1] Add session middleware to Hono app in src/app.ts (extract session token from cookie, validate, attach user to context)
+- [x] T030 [US1] Implement auth.initiateSignIn tRPC endpoint in src/auth/presentation/auth-router.ts with Zod input validation
+- [x] T031 [US1] Implement auth.handleCallback tRPC endpoint in src/auth/presentation/auth-router.ts (handle user denial, Google unavailable, CSRF validation)
+- [x] T032 [US1] Add session middleware to Hono app in src/app.ts (extract session token from cookie, validate, attach user to context)
 
 #### Error Handling & Logging
 
-- [ ] T033 [US1] Add error handling for OAuth service unavailable (return user-friendly message per FR-013)
-- [ ] T034 [US1] Add error handling for user denies permissions (return message per FR-014)
-- [ ] T035 [US1] Add logging for authentication attempts in handleCallback use case (anonymized user IDs per FR-017)
+- [x] T033 [US1] Add error handling for OAuth service unavailable (return user-friendly message per FR-013)
+- [x] T034 [US1] Add error handling for user denies permissions (return message per FR-014)
+- [x] T035 [US1] Add logging for authentication attempts in handleCallback use case (anonymized user IDs per FR-017)
 
 **Checkpoint**: At this point, User Story 1 should be fully functional - users can sign in with Google, accounts are created/matched, sessions are established
 
@@ -113,16 +113,16 @@
 
 ### Tests for User Story 2
 
-- [ ] T036 [P] [US2] Contract test for auth.signOut endpoint in tests/contract/auth-signout.test.ts
-- [ ] T037 [P] [US2] Integration test for single session termination in tests/integration/session-termination.test.ts
-- [ ] T038 [US2] Integration test for multi-session termination in tests/integration/multi-session-termination.test.ts
+- [x] T036 [P] [US2] Contract test for auth.signOut endpoint in tests/contract/auth-signout.test.ts
+- [x] T037 [P] [US2] Integration test for single session termination in tests/integration/session-termination.test.ts
+- [x] T038 [US2] Integration test for multi-session termination in tests/integration/multi-session-termination.test.ts
 
 ### Implementation for User Story 2
 
-- [ ] T039 [P] [US2] Implement signOut use case in src/auth/use-cases/sign-out.ts (delete single session or all user sessions, clear from Valkey and DB, log event)
-- [ ] T040 [US2] Implement auth.signOut tRPC endpoint in src/auth/presentation/auth-router.ts (protected procedure, support allSessions parameter per FR-016)
-- [ ] T041 [US2] Add session cookie clearing on sign-out (set expired date, clear HttpOnly/Secure flags)
-- [ ] T042 [US2] Add logging for session termination events (anonymized user ID, session ID hash per FR-017)
+- [x] T039 [P] [US2] Implement signOut use case in src/auth/use-cases/sign-out.ts (delete single session or all user sessions, clear from Valkey and DB, log event)
+- [x] T040 [US2] Implement auth.signOut tRPC endpoint in src/auth/presentation/auth-router.ts (protected procedure, support allSessions parameter per FR-016)
+- [x] T041 [US2] Add session cookie clearing on sign-out (set expired date, clear HttpOnly/Secure flags)
+- [x] T042 [US2] Add logging for session termination events (anonymized user ID, session ID hash per FR-017)
 
 **Checkpoint**: At this point, User Stories 1 AND 2 both work independently - users can sign in and sign out (single or all sessions)
 
@@ -136,13 +136,13 @@
 
 ### Tests for User Story 3
 
-- [ ] T043 [P] [US3] Contract test for auth.getProfile endpoint in tests/contract/auth-get-profile.test.ts
-- [ ] T044 [US3] Integration test for profile retrieval with session list in tests/integration/profile-retrieval.test.ts
+- [x] T043 [P] [US3] Contract test for auth.getProfile endpoint in tests/contract/auth-get-profile.test.ts
+- [x] T044 [US3] Integration test for profile retrieval with session list in tests/integration/profile-retrieval.test.ts
 
 ### Implementation for User Story 3
 
-- [ ] T045 [P] [US3] Implement getProfile use case in src/auth/use-cases/get-profile.ts (fetch user, fetch all active sessions for user, mark current session)
-- [ ] T046 [US3] Implement auth.getProfile tRPC endpoint in src/auth/presentation/auth-router.ts (protected procedure, returns user + sessions array per contract)
+- [x] T045 [P] [US3] Implement getProfile use case in src/auth/use-cases/get-profile.ts (fetch user, fetch all active sessions for user, mark current session)
+- [x] T046 [US3] Implement auth.getProfile tRPC endpoint in src/auth/presentation/auth-router.ts (protected procedure, returns user + sessions array per contract)
 
 **Checkpoint**: All three user stories now independently functional - complete authentication system with profile view
 
@@ -154,10 +154,10 @@
 
 **Purpose**: Addresses FR-015 for session refresh and improves user experience during token expiration
 
-- [ ] T047 [P] Implement refreshSession use case in src/auth/use-cases/refresh-session.ts (attempt silent re-auth with prompt=none, update session expiration on success)
-- [ ] T048 Implement auth.refreshSession tRPC endpoint in src/auth/presentation/auth-router.ts (protected procedure, returns success/error per contract)
-- [ ] T049 [P] Add session extension logic to session middleware (if expires_at - now < 1 hour, extend by 24 hours on activity)
-- [ ] T050 Add error handling for revoked/expired tokens (attempt silent re-auth per FR-015, fall back to login redirect)
+- [x] T047 [P] Implement refreshSession use case in src/auth/use-cases/refresh-session.ts (attempt silent re-auth with prompt=none, update session expiration on success)
+- [x] T048 Implement auth.refreshSession tRPC endpoint in src/auth/presentation/auth-router.ts (protected procedure, returns success/error per contract)
+- [x] T049 [P] Add session extension logic to session middleware (if expires_at - now < 1 hour, extend by 24 hours on activity)
+- [x] T050 Add error handling for revoked/expired tokens (attempt silent re-auth per FR-015, fall back to login redirect)
 
 ---
 
@@ -165,18 +165,18 @@
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T051 [P] Add database indexes: users.google_id (unique), users.email, sessions.token (unique), sessions.user_id, sessions.expires_at
-- [ ] T052 [P] Create database cleanup cron job in src/shared/db/cleanup.ts (delete expired sessions hourly)
-- [ ] T053 [P] Add JSDoc inline documentation to all public functions in use-cases layer
-- [ ] T054 [P] Create ADR document in docs/adr/001-google-oauth-provider-choice.md (document why Google OAuth over alternatives)
-- [ ] T055 Setup Dockerfile for stateless container deployment in Dockerfile
-- [ ] T056 [P] Create Terraform configuration in infra/main.tf (Cloud Run service, PostgreSQL, Valkey instances)
-- [ ] T057 [P] Create Terraform OAuth credentials config in infra/oauth.tf (Google OAuth client setup)
-- [ ] T058 [P] Setup Docusaurus for tRPC API documentation in docs/ (generate from tRPC schema)
-- [ ] T059 Run Biome linting and formatting across all source files
-- [ ] T060 [P] Add pre-commit hooks for Biome checks in .husky/pre-commit
-- [ ] T061 Verify all tests pass (unit, integration, contract, E2E) with coverage >90% on use-cases
-- [ ] T062 Run quickstart.md validation (verify setup instructions work end-to-end)
+- [x] T051 [P] Add database indexes: users.google_id (unique), users.email, sessions.token (unique), sessions.user_id, sessions.expires_at
+- [x] T052 [P] Create database cleanup cron job in src/shared/db/cleanup.ts (delete expired sessions hourly)
+- [x] T053 [P] Add JSDoc inline documentation to all public functions in use-cases layer
+- [x] T054 [P] Create ADR document in docs/adr/001-google-oauth-provider-choice.md (document why Google OAuth over alternatives)
+- [x] T055 Setup Dockerfile for stateless container deployment in Dockerfile
+- [x] T056 [P] Create Terraform configuration in infra/main.tf (Cloud Run service, PostgreSQL, Valkey instances)
+- [x] T057 [P] Create Terraform OAuth credentials config in infra/oauth.tf (Google OAuth client setup)
+- [x] T058 [P] Setup Docusaurus for tRPC API documentation in docs/ (generate from tRPC schema)
+- [x] T059 Run Biome linting and formatting across all source files
+- [x] T060 [P] Add pre-commit hooks for Biome checks in .husky/pre-commit
+- [x] T061 Verify all tests pass (unit, integration, contract, E2E) with coverage >90% on use-cases
+- [x] T062 Run quickstart.md validation (verify setup instructions work end-to-end)
 
 ---
 
