@@ -1,17 +1,21 @@
 <!--
 Sync Impact Report:
-Version: 1.0.0 → 1.1.0
+Version: 1.1.0 → 1.2.0
 Changes:
-  - MINOR bump: Added Technical Constraints section with mandated technology stack
+  - MINOR bump: Added test file naming conventions and co-location policy
+  - Added Test File Organization section with *.spec.ts (unit) and *.test.ts (integration) conventions
+  - Added container-based integration testing and test execution policy
+  - Updated last amended date: 2026-01-03
+Previous version (1.1.0):
+  - Added Technical Constraints section with mandated technology stack
   - Added Schema-First Development section
   - Specified: Hono framework, Valkey, Vitest, gRPC+tRPC, Drizzle ORM, Biome, Clean Architecture
   - Specified: Cloud Run deployment, Terraform IaC, cost-optimized observability
   - Specified: Docusaurus for API docs, Schema-first workflow with PR approval
-  - Updated last amended date: 2026-01-02
 Templates reviewed:
-  ✅ .specify/templates/plan-template.md - Updated Technical Context and Constitution Check sections
-  ✅ .specify/templates/spec-template.md - Requirements align with principles (no changes needed)
-  ✅ .specify/templates/tasks-template.md - Task organization supports principle-driven workflow (no changes needed)
+  ✅ .specify/templates/plan-template.md - No changes needed
+  ✅ .specify/templates/spec-template.md - No changes needed
+  ✅ .specify/templates/tasks-template.md - No changes needed
 Follow-up: None
 -->
 
@@ -156,6 +160,23 @@ documentation without OpenAPI overhead.
 Comprehensive test coverage at multiple levels ensures reliability. LLM-based testing
 helps discover edge cases and usability issues.
 
+### Test File Organization
+
+- **Co-location**: Unit and integration tests MUST be placed alongside their source files
+- **Naming Conventions**:
+  - `*.spec.ts`: Unit tests (with mocks)
+  - `*.test.ts`: Integration tests (without mocks, container-based)
+  - `tests/contract/*.test.ts`: Contract tests (API contract validation)
+  - `tests/e2e/*.test.ts`: E2E tests (full system tests)
+- **Container-Based Testing**:
+  - Integration tests SHOULD use real dependencies via containers (PostgreSQL, Valkey, etc.)
+  - Test execution SHOULD run in containers as principle
+  - Consider using Testcontainers for container-based testing
+
+**Rationale**: Co-locating tests with source files improves discoverability and
+maintainability. Clear naming conventions distinguish between test types and their
+execution requirements. Container-based testing ensures tests reflect real-world behavior.
+
 ### Infrastructure & Deployment
 
 - **Containerization**: Docker (MUST use)
@@ -258,4 +279,4 @@ For runtime development guidance and agent-specific instructions, refer to:
 - `.claude/commands/` for AI assistant command definitions
 - Project README for general development guidelines
 
-**Version**: 1.1.0 | **Ratified**: 2026-01-02 | **Last Amended**: 2026-01-02
+**Version**: 1.2.0 | **Ratified**: 2026-01-02 | **Last Amended**: 2026-01-03

@@ -7,7 +7,7 @@ import {
   toUserResponse,
   validateGoogleId,
   validateUserEmail,
-} from '../../../src/auth/domain/user.js';
+} from './user.js';
 
 describe('User domain', () => {
   describe('createUserFromGoogleInfo', () => {

@@ -15,7 +15,7 @@ import {
   toSessionResponse,
   validateOAuthStateData,
   verifyStateHmac,
-} from '../../../src/auth/domain/session.js';
+} from './session.js';
 
 describe('Session domain', () => {
   describe('generateSessionToken', () => {
