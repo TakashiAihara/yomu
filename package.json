@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Yomu - Reading application with Google OAuth authentication",
   "type": "module",
+  "packageManager": "pnpm@10.15.0",
   "engines": {
     "node": ">=18.0.0"
   },
