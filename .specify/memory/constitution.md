@@ -1,14 +1,13 @@
 <!--
 Sync Impact Report:
-Version: 1.2.0 → 1.3.0
+Version: 1.3.0 → 1.4.0
 Changes:
-  - MINOR bump: Added Package Manager section mandating pnpm
-  - Specified: pnpm as required package manager (over npm/yarn)
+  - MINOR bump: Added Project Structure section mandating Turborepo monorepo
+  - Specified: Turborepo with pnpm workspaces for monorepo management
+  - Specified: apps/ directory for applications, packages/ for shared libraries
   - Updated last amended date: 2026-01-03
-Previous version (1.2.0):
-  - Added test file naming conventions and co-location policy
-  - Added Test File Organization section with *.spec.ts (unit) and *.test.ts (integration) conventions
-  - Added container-based integration testing and test execution policy
+Previous version (1.3.0):
+  - Added Package Manager section mandating pnpm
 Templates reviewed:
   ✅ .specify/templates/plan-template.md - No changes needed
   ✅ .specify/templates/spec-template.md - No changes needed
@@ -200,6 +199,17 @@ reducing configuration complexity and build times.
 through content-addressable storage, and strict dependency isolation that prevents
 phantom dependencies.
 
+### Project Structure
+
+- **Monorepo**: MUST use Turborepo with pnpm workspaces
+- **Apps**: Application code MUST be in `apps/` directory
+- **Packages**: Shared libraries MUST be in `packages/` directory
+- **Build Tool**: Turborepo (MUST use for build orchestration and caching)
+
+**Rationale**: Monorepo structure enables code sharing, consistent tooling,
+and optimized builds through Turborepo's caching and parallel execution. pnpm
+workspaces provide strict dependency isolation between packages.
+
 ### CLI & Admin Interface
 
 - **CLI**: MUST be developed with tRPC integration
@@ -284,4 +294,4 @@ For runtime development guidance and agent-specific instructions, refer to:
 - `.claude/commands/` for AI assistant command definitions
 - Project README for general development guidelines
 
-**Version**: 1.3.0 | **Ratified**: 2026-01-02 | **Last Amended**: 2026-01-03
+**Version**: 1.4.0 | **Ratified**: 2026-01-02 | **Last Amended**: 2026-01-03

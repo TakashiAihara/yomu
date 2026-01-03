@@ -31,6 +31,9 @@ coverage/
 # Drizzle
 drizzle/
 
+# Turborepo
+.turbo/
+
 # Misc
 *.tgz
 .opencode/
