@@ -1,13 +1,13 @@
 <!--
 Sync Impact Report:
-Version: 1.3.0 → 1.4.0
+Version: 1.4.0 → 1.5.0
 Changes:
-  - MINOR bump: Added Project Structure section mandating Turborepo monorepo
-  - Specified: Turborepo with pnpm workspaces for monorepo management
-  - Specified: apps/ directory for applications, packages/ for shared libraries
+  - MINOR bump: Added Continuous Integration section mandating GitHub Actions CI
+  - Specified: CI MUST include lint, typecheck, unit tests, integration tests, build
+  - Specified: All PRs MUST pass CI checks before merge
   - Updated last amended date: 2026-01-03
-Previous version (1.3.0):
-  - Added Package Manager section mandating pnpm
+Previous version (1.4.0):
+  - Added Project Structure section mandating Turborepo monorepo
 Templates reviewed:
   ✅ .specify/templates/plan-template.md - No changes needed
   ✅ .specify/templates/spec-template.md - No changes needed
@@ -254,6 +254,24 @@ begins. PR approval ensures architectural review before coding effort is investe
 - Breaking changes MUST be explicitly approved and documented
 - New features SHOULD include tests
 
+### Continuous Integration
+
+- **CI Platform**: GitHub Actions (MUST use)
+- **Required Checks**: All PRs MUST pass CI checks before merge
+- **CI Pipeline MUST include**:
+  - Lint (Biome)
+  - Type check (TypeScript)
+  - Unit tests (`*.spec.ts`)
+  - Contract tests (`tests/contract/*.test.ts`)
+  - Build verification
+  - Docker build verification
+- **Integration Tests**: SHOULD run with real dependencies via service containers
+- **E2E Tests**: SHOULD run on main branch pushes
+
+**Rationale**: Automated CI ensures consistent quality across all changes, catches
+issues early, and provides confidence for merging. Required checks prevent broken
+code from reaching the main branch.
+
 ### Feature Development
 
 - Features SHOULD follow the spec workflow (spec → plan → tasks → implement)
@@ -294,4 +312,4 @@ For runtime development guidance and agent-specific instructions, refer to:
 - `.claude/commands/` for AI assistant command definitions
 - Project README for general development guidelines
 
-**Version**: 1.4.0 | **Ratified**: 2026-01-02 | **Last Amended**: 2026-01-03
+**Version**: 1.5.0 | **Ratified**: 2026-01-02 | **Last Amended**: 2026-01-03
