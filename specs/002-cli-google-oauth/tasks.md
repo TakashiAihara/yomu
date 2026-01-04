@@ -23,11 +23,11 @@ Base path: `apps/cli/` (monorepo app following `apps/api/` pattern)
 
 **Purpose**: Initialize CLI application in monorepo
 
-- [ ] T001 Create apps/cli/ directory structure per plan.md
-- [ ] T002 Create apps/cli/package.json with dependencies (commander, @trpc/client, keytar, conf, open, pino, ora, chalk)
-- [ ] T003 [P] Create apps/cli/tsconfig.json extending @yomu/tsconfig/node.json
-- [ ] T004 [P] Create apps/cli/vitest.config.ts for unit testing
-- [ ] T005 [P] Configure Biome for apps/cli in root biome.json
+- [x] T001 Create apps/cli/ directory structure per plan.md
+- [x] T002 Create apps/cli/package.json with dependencies (commander, @trpc/client, keytar, conf, open, pino, ora, chalk)
+- [x] T003 [P] Create apps/cli/tsconfig.json extending @yomu/tsconfig/node.json
+- [x] T004 [P] Create apps/cli/vitest.config.ts for unit testing
+- [x] T005 [P] Configure Biome for apps/cli in root biome.json
 
 **Checkpoint**: CLI project skeleton ready
 
@@ -39,17 +39,17 @@ Base path: `apps/cli/` (monorepo app following `apps/api/` pattern)
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T006 [P] Create apps/cli/src/shared/config.ts with API URL, log level settings
-- [ ] T007 [P] Create apps/cli/src/shared/logger.ts with pino structured logging (redact sessionToken)
-- [ ] T008 [P] Create apps/cli/src/shared/errors.ts with AuthError, NetworkError, StorageError types
-- [ ] T009 Create apps/cli/src/api/client.ts with tRPC client setup using AppRouter from @yomu/api
-- [ ] T010 Create apps/cli/src/storage/credential-store.ts with ICredentialStore interface
-- [ ] T011 [P] Create apps/cli/src/storage/keychain.ts with KeychainStore implementation using keytar
-- [ ] T012 [P] Create apps/cli/src/storage/file-store.ts with FileStore implementation using conf (encrypted)
-- [ ] T013 Implement storage factory in apps/cli/src/storage/credential-store.ts (keychain with file fallback)
-- [ ] T014 Create apps/cli/src/auth/token-manager.ts with expiration check and refresh logic
-- [ ] T015 [P] Create apps/cli/src/lib/port.ts with findAvailablePort utility (8085-8099 range)
-- [ ] T016 [P] Create apps/cli/src/lib/browser.ts with openBrowser and isHeadlessEnvironment utilities
+- [x] T006 [P] Create apps/cli/src/shared/config.ts with API URL, log level settings
+- [x] T007 [P] Create apps/cli/src/shared/logger.ts with pino structured logging (redact sessionToken)
+- [x] T008 [P] Create apps/cli/src/shared/errors.ts with AuthError, NetworkError, StorageError types
+- [x] T009 Create apps/cli/src/api/client.ts with tRPC client setup using AppRouter from @yomu/api
+- [x] T010 Create apps/cli/src/storage/credential-store.ts with ICredentialStore interface
+- [x] T011 [P] Create apps/cli/src/storage/keychain.ts with KeychainStore implementation using keytar
+- [x] T012 [P] Create apps/cli/src/storage/file-store.ts with FileStore implementation using conf (encrypted)
+- [x] T013 Implement storage factory in apps/cli/src/storage/credential-store.ts (keychain with file fallback)
+- [x] T014 Create apps/cli/src/auth/token-manager.ts with expiration check and refresh logic
+- [x] T015 [P] Create apps/cli/src/lib/port.ts with findAvailablePort utility (8085-8099 range)
+- [x] T016 [P] Create apps/cli/src/lib/browser.ts with openBrowser and isHeadlessEnvironment utilities
 
 **Checkpoint**: Foundation ready - user story implementation can now begin
 
