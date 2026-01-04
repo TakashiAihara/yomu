@@ -1,3 +1,4 @@
+import type { Server } from 'node:http';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Mock modules before importing
@@ -10,50 +11,62 @@ vi.mock('../shared/logger.js', () => ({
   },
 }));
 
-describe('CallbackServer', () => {
-  beforeEach(() => {
+vi.mock('../lib/port.js', async () => {
+  const actual = await vi.importActual('../lib/port.js');
+  return {
+    ...actual,
+    isPortAvailable: vi.fn().mockResolvedValue(true),
+  };
+});
+
+describe('CallbackServer', { sequential: true }, () => {
+  let activeServer: Server | null = null;
+
+  beforeEach(async () => {
     vi.clearAllMocks();
+    // Re-mock isPortAvailable for each test
+    const portModule = vi.mocked(await import('../lib/port.js'));
+    portModule.isPortAvailable.mockResolvedValue(true);
   });
 
-  afterEach(() => {
-    vi.restoreAllMocks();
+  afterEach(async () => {
+    if (activeServer) {
+      const { stopCallbackServer } = await import('./callback-server.js');
+      await stopCallbackServer(activeServer);
+      activeServer = null;
+      // Wait for port to be released
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
   });
 
   describe('startCallbackServer', () => {
-    it('should start server on specified port', async () => {
-      const { startCallbackServer, stopCallbackServer } = await import('./callback-server.js');
+    it('should start server on fixed port 8085', async () => {
+      const { startCallbackServer } = await import('./callback-server.js');
+      const { CALLBACK_PORT } = await import('../lib/port.js');
 
-      const { port, server } = await startCallbackServer(9999);
+      const { port, server } = await startCallbackServer();
+      activeServer = server;
 
-      expect(port).toBe(9999);
+      expect(port).toBe(CALLBACK_PORT);
       expect(server).toBeDefined();
-
-      await stopCallbackServer(server);
     });
 
-    it('should find available port if specified port is busy', async () => {
-      const { startCallbackServer, stopCallbackServer } = await import('./callback-server.js');
+    it('should throw error if port is busy', async () => {
+      const { isPortAvailable } = await import('../lib/port.js');
+      vi.mocked(isPortAvailable).mockResolvedValueOnce(false);
 
-      // Start first server
-      const first = await startCallbackServer(9998);
-      expect(first.port).toBe(9998);
+      const { startCallbackServer } = await import('./callback-server.js');
 
-      // Second should find next port
-      const second = await startCallbackServer(9998);
-      expect(second.port).toBeGreaterThan(9998);
-
-      await stopCallbackServer(first.server);
-      await stopCallbackServer(second.server);
+      await expect(startCallbackServer()).rejects.toThrow('Port 8085 is already in use');
     });
   });
 
   describe('waitForCallback', () => {
     it('should resolve with code when callback received', async () => {
-      const { startCallbackServer, stopCallbackServer, waitForCallback } = await import(
-        './callback-server.js'
-      );
+      const { startCallbackServer, waitForCallback } = await import('./callback-server.js');
 
-      const { port, server } = await startCallbackServer(9997);
+      const { port, server } = await startCallbackServer();
+      activeServer = server;
 
       const callbackPromise = waitForCallback(server, 5000);
 
@@ -67,16 +80,13 @@ describe('CallbackServer', () => {
       const result = await callbackPromise;
       expect(result.code).toBe('test-code');
       expect(result.state).toBe('test-state');
-
-      await stopCallbackServer(server);
     });
 
     it('should reject when error parameter is present', async () => {
-      const { startCallbackServer, stopCallbackServer, waitForCallback } = await import(
-        './callback-server.js'
-      );
+      const { startCallbackServer, waitForCallback } = await import('./callback-server.js');
 
-      const { port, server } = await startCallbackServer(9996);
+      const { port, server } = await startCallbackServer();
+      activeServer = server;
 
       // Create the callback promise and immediately store the result
       // Use Promise.allSettled to handle both fetch and callback atomically
@@ -92,22 +102,17 @@ describe('CallbackServer', () => {
       if (callbackSettled.status === 'rejected') {
         expect((callbackSettled.reason as Error).message).toBe('Access denied by user');
       }
-
-      await stopCallbackServer(server);
     });
 
     it('should timeout if no callback received', async () => {
-      const { startCallbackServer, stopCallbackServer, waitForCallback } = await import(
-        './callback-server.js'
-      );
+      const { startCallbackServer, waitForCallback } = await import('./callback-server.js');
 
-      const { server } = await startCallbackServer(9995);
+      const { server } = await startCallbackServer();
+      activeServer = server;
 
       const callbackPromise = waitForCallback(server, 100);
 
       await expect(callbackPromise).rejects.toThrow('timed out');
-
-      await stopCallbackServer(server);
     });
   });
 });

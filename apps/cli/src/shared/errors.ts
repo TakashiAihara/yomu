@@ -5,7 +5,8 @@ export type AuthErrorCode =
   | 'NETWORK'
   | 'INVALID_TOKEN'
   | 'STATE_EXPIRED'
-  | 'INVALID_STATE';
+  | 'INVALID_STATE'
+  | 'PORT_IN_USE';
 
 export class AuthError extends Error {
   constructor(
@@ -79,6 +80,15 @@ export class AuthError extends Error {
       'INVALID_STATE',
       false,
       'Security error. Please try again.'
+    );
+  }
+
+  static portInUse(port: number): AuthError {
+    return new AuthError(
+      `Port ${port} is already in use`,
+      'PORT_IN_USE',
+      true,
+      `Port ${port} is in use. Please close the application using it and try again.`
     );
   }
 }

@@ -1,6 +1,6 @@
 import { type IncomingMessage, type Server, type ServerResponse, createServer } from 'node:http';
 
-import { findAvailablePort } from '../lib/port.js';
+import { CALLBACK_PORT, isPortAvailable } from '../lib/port.js';
 import { AuthError } from '../shared/errors.js';
 import { logger } from '../shared/logger.js';
 
@@ -89,10 +89,12 @@ const ERROR_HTML = (error: string) => `
 </html>
 `;
 
-export async function startCallbackServer(
-  preferredPort = 8085
-): Promise<{ port: number; server: Server }> {
-  const port = await findAvailablePort(preferredPort, preferredPort + 14);
+export async function startCallbackServer(): Promise<{ port: number; server: Server }> {
+  const port = CALLBACK_PORT;
+
+  if (!(await isPortAvailable(port))) {
+    throw AuthError.portInUse(port);
+  }
 
   const server = createServer();
 

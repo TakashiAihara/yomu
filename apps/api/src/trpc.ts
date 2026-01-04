@@ -57,7 +57,7 @@ const isAuthenticated = middleware(async ({ ctx, next }) => {
 
 export const protectedProcedure = t.procedure.use(isAuthenticated);
 
-export type AppRouter = ReturnType<typeof createAppRouter>;
+export type AppRouter = Awaited<ReturnType<typeof createAppRouter>>;
 
 export async function createAppRouter() {
   // Dynamic import to avoid circular dependency
