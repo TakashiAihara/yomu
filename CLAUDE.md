@@ -22,6 +22,7 @@ npm test && npm run lint
 TypeScript (latest stable): Follow standard conventions
 
 ## Recent Changes
+- 002-cli-google-oauth: Added TypeScript (latest stable)
 
 - 001-google-oauth-auth: Added TypeScript (latest stable)
 

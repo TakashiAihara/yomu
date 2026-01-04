@@ -1,0 +1,45 @@
+{
+  "name": "@yomu/cli",
+  "version": "0.1.0",
+  "description": "Yomu CLI with Google OAuth authentication",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "yomu": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@trpc/client": "^10.45.2",
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
+    "conf": "^13.0.1",
+    "keytar": "^7.9.0",
+    "open": "^10.1.0",
+    "ora": "^8.1.1",
+    "pino": "^9.5.0",
+    "pino-pretty": "^13.0.0",
+    "superjson": "^2.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@yomu/tsconfig": "workspace:*",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  },
+  "peerDependencies": {
+    "@yomu/api": "workspace:*"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}
