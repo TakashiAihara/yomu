@@ -1,9 +1,14 @@
 import dotenv from 'dotenv';
+import fs from 'node:fs';
 import path from 'node:path';
 import { z } from 'zod';
 
-// Load .env file from project root
-dotenv.config({ path: path.resolve(process.cwd(), '../../.env') });
+// Load .env file from project root (for local development)
+// In Docker, environment variables are passed directly
+const envPath = path.resolve(process.cwd(), '../../.env');
+if (fs.existsSync(envPath)) {
+  dotenv.config({ path: envPath });
+}
 
 const envSchema = z.object({
   // Google OAuth

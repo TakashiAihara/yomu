@@ -16,15 +16,26 @@ Reading application with Google OAuth authentication.
 pnpm install
 ```
 
-### 2. Start infrastructure
+### 2. Start infrastructure (database only)
 
 ```bash
-docker-compose up -d
+docker compose up -d postgres valkey
 ```
 
 This starts:
 - PostgreSQL (port 5433)
 - Valkey/Redis (port 6380)
+
+Or start everything including the API:
+
+```bash
+docker compose up -d
+```
+
+This starts:
+- PostgreSQL (port 5433)
+- Valkey/Redis (port 6380)
+- API server (port 3000)
 
 ### 3. Configure environment variables
 
@@ -72,7 +83,25 @@ VALKEY_URL=redis://localhost:6380
 
 ## Development
 
-### Start API server
+### Option 1: Docker (recommended)
+
+Start all services with Docker:
+
+```bash
+docker compose up -d
+```
+
+The API is available at http://localhost:3000
+
+### Option 2: Local development
+
+Start database and cache with Docker:
+
+```bash
+docker compose up -d postgres valkey
+```
+
+Then start API server locally:
 
 ```bash
 pnpm --filter @yomu/api dev

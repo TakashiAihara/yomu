@@ -1,57 +1,58 @@
-# This Dockerfile should be built from the repository root
-# docker build -f apps/api/Dockerfile -t yomu-api .
+# Build stage
+FROM node:22-alpine AS builder
 
-FROM node:22-alpine AS base
-
+# Install pnpm
 RUN corepack enable && corepack prepare pnpm@10.15.0 --activate
 
 WORKDIR /app
 
-FROM base AS deps
-
-# Copy workspace configuration
+# Copy package files
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/api/package.json ./apps/api/
 COPY packages/tsconfig/package.json ./packages/tsconfig/
 COPY packages/biome-config/package.json ./packages/biome-config/
 
-RUN pnpm install --frozen-lockfile --prod --filter @yomu/api...
+# Install dependencies
+RUN pnpm install --frozen-lockfile
 
-FROM base AS build
+# Copy source files
+COPY apps/api/ ./apps/api/
+COPY packages/ ./packages/
 
-# Copy workspace configuration
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
+# Build
+RUN pnpm --filter @yomu/api build
+
+# Production stage
+FROM node:22-alpine AS runner
+
+# Install pnpm for running
+RUN corepack enable && corepack prepare pnpm@10.15.0 --activate
+
+WORKDIR /app
+
+# Copy package files for production install
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/api/package.json ./apps/api/
 COPY packages/tsconfig/package.json ./packages/tsconfig/
 COPY packages/biome-config/package.json ./packages/biome-config/
 
-RUN pnpm install --frozen-lockfile --filter @yomu/api...
+# Install production dependencies only
+RUN pnpm install --frozen-lockfile --prod
 
-# Copy source files
-COPY packages/tsconfig ./packages/tsconfig
-COPY packages/biome-config ./packages/biome-config
-COPY apps/api/tsconfig.json ./apps/api/
-COPY apps/api/src ./apps/api/src
+# Copy built files
+COPY --from=builder /app/apps/api/dist ./apps/api/dist
 
-RUN pnpm --filter @yomu/api build
-
-FROM base AS runner
-
-ENV NODE_ENV=production
-
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 hono
-
+# Set working directory to api
 WORKDIR /app/apps/api
 
-COPY --from=deps /app/apps/api/node_modules ./node_modules
-COPY --from=build /app/apps/api/dist ./dist
-COPY apps/api/package.json ./
-
-USER hono
+# Environment variables (to be overridden)
+ENV NODE_ENV=production
+ENV PORT=3000
 
 EXPOSE 3000
 
-ENV PORT=3000
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://localhost:3000/health || exit 1
 
 CMD ["node", "dist/index.js"]
