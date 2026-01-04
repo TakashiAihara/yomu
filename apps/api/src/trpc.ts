@@ -57,11 +57,11 @@ const isAuthenticated = middleware(async ({ ctx, next }) => {
 
 export const protectedProcedure = t.procedure.use(isAuthenticated);
 
-import { authRouter } from './auth/presentation/auth-router.js';
-
 export type AppRouter = ReturnType<typeof createAppRouter>;
 
-export function createAppRouter() {
+export async function createAppRouter() {
+  // Dynamic import to avoid circular dependency
+  const { authRouter } = await import('./auth/presentation/auth-router.js');
   return router({
     auth: authRouter,
   });

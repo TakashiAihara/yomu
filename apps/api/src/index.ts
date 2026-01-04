@@ -21,7 +21,7 @@ async function main() {
   await connectCacheClient();
 
   const app = createApp();
-  const appRouter = createAppRouter();
+  const appRouter = await createAppRouter();
   mountTRPC(app, appRouter);
 
   serve(
