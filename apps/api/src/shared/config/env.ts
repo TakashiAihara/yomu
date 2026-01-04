@@ -1,4 +1,9 @@
+import dotenv from 'dotenv';
+import path from 'node:path';
 import { z } from 'zod';
+
+// Load .env file from project root
+dotenv.config({ path: path.resolve(process.cwd(), '../../.env') });
 
 const envSchema = z.object({
   // Google OAuth

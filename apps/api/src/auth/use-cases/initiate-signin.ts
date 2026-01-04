@@ -27,9 +27,16 @@ export async function initiateSignIn(
 
   const oauthConfig = createGoogleOAuthConfig(env);
 
-  const authUrl = generateAuthUrl(oauthConfig, stateData.state, {
-    prompt: 'consent',
-  });
+  // Use CLI's redirect URI if provided, otherwise use env default
+  const effectiveRedirectUri = input.redirectUri ?? env.GOOGLE_REDIRECT_URI;
+
+  const authUrl = generateAuthUrl(
+    { ...oauthConfig, redirectUri: effectiveRedirectUri },
+    stateData.state,
+    {
+      prompt: 'consent',
+    }
+  );
 
   logger.debug('OAuth authorization URL generated', {
     hasRedirectUri: Boolean(input.redirectUri),

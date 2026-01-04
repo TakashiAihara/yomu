@@ -72,9 +72,13 @@ export async function handleCallback(input: HandleCallbackInput): Promise<Handle
 
   const oauthConfig = createGoogleOAuthConfig(env);
 
+  // Use stored redirect URI if available (for CLI flow)
+  const effectiveRedirectUri = stateData.redirectUri ?? env.GOOGLE_REDIRECT_URI;
+  const effectiveConfig = { ...oauthConfig, redirectUri: effectiveRedirectUri };
+
   let tokens: GoogleTokenResponse;
   try {
-    tokens = await exchangeCodeForTokens(oauthConfig, input.code);
+    tokens = await exchangeCodeForTokens(effectiveConfig, input.code);
   } catch (error) {
     if (error instanceof GoogleOAuthError) {
       if (error.code === 'NETWORK_ERROR') {
