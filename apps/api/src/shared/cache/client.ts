@@ -1,4 +1,4 @@
-import Redis from 'ioredis';
+import { Redis } from 'ioredis';
 
 import type { Env } from '../config/env.js';
 import { getLogger } from '../logging/logger.js';
@@ -13,9 +13,9 @@ const RETRY_DELAY_MS = 1000;
 export function createCacheClient(env: Pick<Env, 'VALKEY_URL'>): CacheClient {
   const logger = getLogger();
 
-  cacheClient = new Redis(env.VALKEY_URL, {
+  const client = new Redis(env.VALKEY_URL, {
     maxRetriesPerRequest: MAX_RETRIES,
-    retryStrategy(times) {
+    retryStrategy(times: number) {
       if (times > MAX_RETRIES) {
         logger.error('Valkey connection failed after max retries', { attempts: times });
         return null;
@@ -24,26 +24,27 @@ export function createCacheClient(env: Pick<Env, 'VALKEY_URL'>): CacheClient {
       logger.warn('Valkey connection retry', { attempt: times, delayMs: delay });
       return delay;
     },
-    reconnectOnError(err) {
+    reconnectOnError(err: Error) {
       const targetErrors = ['READONLY', 'ECONNRESET', 'ECONNREFUSED'];
       return targetErrors.some((e) => err.message.includes(e));
     },
     lazyConnect: true,
   });
 
-  cacheClient.on('connect', () => {
+  client.on('connect', () => {
     logger.info('Valkey client connected');
   });
 
-  cacheClient.on('error', (err) => {
+  client.on('error', (err: Error) => {
     logger.error('Valkey client error', { error: err.message });
   });
 
-  cacheClient.on('close', () => {
+  client.on('close', () => {
     logger.info('Valkey client connection closed');
   });
 
-  return cacheClient;
+  cacheClient = client;
+  return client;
 }
 
 export function getCacheClient(): CacheClient {

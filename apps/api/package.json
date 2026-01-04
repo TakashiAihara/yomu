@@ -4,6 +4,11 @@
   "private": true,
   "description": "Yomu API server with Google OAuth authentication",
   "type": "module",
+  "exports": {
+    "./trpc": {
+      "types": "./src/trpc.ts"
+    }
+  },
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
