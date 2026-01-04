@@ -35,17 +35,8 @@ export async function loginCommand(options: LoginOptions = {}): Promise<void> {
       return;
     }
 
-    // Determine auth method
-    const useManual = options.manual ?? isHeadlessEnvironment();
-
-    if (useManual) {
-      if (!options.manual && isHeadlessEnvironment()) {
-        // biome-ignore lint/suspicious/noConsoleLog: CLI user-facing output
-        console.log(
-          chalk.dim('Headless environment detected, using manual authentication mode.\n')
-        );
-      }
-
+    // Use manual flow only if explicitly requested
+    if (options.manual) {
       const result = await manualAuthFlow();
 
       // biome-ignore lint/suspicious/noConsoleLog: CLI user-facing output
@@ -53,14 +44,27 @@ export async function loginCommand(options: LoginOptions = {}): Promise<void> {
       // biome-ignore lint/suspicious/noConsoleLog: CLI user-facing output
       console.log(`${chalk.green('✓')} Logged in as ${chalk.bold(result.email)}`);
     } else {
-      spinner.start('Opening browser for authentication...');
+      // Browser flow works for both GUI and headless environments
+      // In headless, it shows URL for manual opening but still uses local callback server
+      const isHeadless = isHeadlessEnvironment();
+
+      if (!isHeadless) {
+        spinner.start('Opening browser for authentication...');
+      }
 
       try {
         const result = await browserAuthFlow();
 
-        spinner.succeed(`Logged in as ${chalk.bold(result.email)}`);
+        if (isHeadless) {
+          // biome-ignore lint/suspicious/noConsoleLog: CLI user-facing output
+          console.log(`${chalk.green('✓')} Logged in as ${chalk.bold(result.email)}`);
+        } else {
+          spinner.succeed(`Logged in as ${chalk.bold(result.email)}`);
+        }
       } catch (error) {
-        spinner.fail('Authentication failed');
+        if (!isHeadless) {
+          spinner.fail('Authentication failed');
+        }
         throw error;
       }
     }

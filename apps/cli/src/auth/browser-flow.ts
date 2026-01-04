@@ -39,12 +39,15 @@ export async function browserAuthFlow(): Promise<BrowserAuthResult> {
 
     logger.debug({ authUrl: `${authUrl.substring(0, 50)}...` }, 'Got auth URL');
 
-    // Open browser
+    // Open browser or show URL
     const browserOpened = await openBrowser(authUrl);
 
     if (!browserOpened) {
-      // Fallback: show URL to user
-      logger.info(getBrowserOpenInstructions(authUrl));
+      // Headless/SSH environment: show URL for manual opening
+      // biome-ignore lint/suspicious/noConsoleLog: CLI user-facing output
+      console.log('\nOpen this URL in your browser to authenticate:\n');
+      // biome-ignore lint/suspicious/noConsoleLog: CLI user-facing output
+      console.log(`  ${authUrl}\n`);
     }
 
     // Wait for callback

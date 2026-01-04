@@ -19,7 +19,10 @@ export async function initiateSignIn(
   const env = getEnv();
   const logger = getLogger();
 
-  logger.info('Initiating OAuth sign-in flow');
+  logger.info('Initiating OAuth sign-in flow', {
+    inputRedirectUri: input.redirectUri,
+    envRedirectUri: env.GOOGLE_REDIRECT_URI,
+  });
 
   const stateData = createOAuthStateData(env.SESSION_SECRET, input.redirectUri);
 
@@ -38,8 +41,9 @@ export async function initiateSignIn(
     }
   );
 
-  logger.debug('OAuth authorization URL generated', {
-    hasRedirectUri: Boolean(input.redirectUri),
+  logger.info('OAuth authorization URL generated', {
+    effectiveRedirectUri,
+    authUrl: authUrl.substring(0, 100) + '...',
   });
 
   return {
