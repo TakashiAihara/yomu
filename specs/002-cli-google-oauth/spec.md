@@ -5,6 +5,16 @@
 **Status**: Draft
 **Input**: User description: "CLI application with Google OAuth authentication support. The CLI should support: 1) Localhost redirect method (like `gh auth login` - start local HTTP server, browser redirects to localhost callback), 2) Manual copy-paste method (display auth URL, user copies authorization code back to terminal), and eventually 3) Device Authorization Flow (RFC 8628) for headless/remote environments. CLI must use tRPC for backend communication per Constitution. Should be created in apps/cli/ directory."
 
+## Clarifications
+
+### Session 2026-01-04
+
+- Q: Should the CLI support multiple Google accounts, or only one account at a time? → A: Single active account with ability to switch (like `gh auth switch`)
+- Q: How should credentials be stored to ensure security? → A: OS keychain preferred (macOS Keychain, Windows Credential Manager, Linux Secret Service) with encrypted file fallback for headless environments
+- Q: What level of logging should be implemented for authentication events? → A: Standard (info-level for login/logout success/failure, debug for flow details)
+- Q: How long should the CLI wait for OAuth completion before timing out? → A: 5 minutes (allows for MFA and account selection)
+- Q: How should the CLI handle rate limiting from Google's OAuth endpoints? → A: Display rate limit error with suggested wait time and retry guidance
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Interactive Browser Login (Priority: P1)
@@ -97,13 +107,15 @@ A user on a headless server or in an environment where they cannot paste codes w
 - How does the system handle network interruption during authentication?
   - CLI should show a clear timeout message and allow retry
 - What happens if the user closes the browser without completing OAuth?
-  - CLI should timeout after a reasonable period and inform the user
+  - CLI should timeout after 5 minutes and inform the user
 - How does the system handle expired refresh tokens?
   - CLI should detect expired tokens on next operation and prompt for re-authentication
 - What happens when credentials file is corrupted or manually edited?
   - CLI should detect invalid credentials and prompt for fresh login
 - What happens in a containerized environment with no browser?
   - CLI should detect this and suggest manual or device flow options
+- What happens when Google OAuth rate limits are hit?
+  - CLI should display rate limit error with suggested wait time and retry guidance
 
 ## Requirements *(mandatory)*
 
@@ -112,7 +124,7 @@ A user on a headless server or in an environment where they cannot paste codes w
 - **FR-001**: CLI MUST provide a login command that initiates Google OAuth authentication
 - **FR-002**: CLI MUST support localhost redirect authentication method (browser-based flow)
 - **FR-003**: CLI MUST support manual code entry authentication method (copy-paste flow)
-- **FR-004**: CLI MUST securely store authentication credentials locally after successful login
+- **FR-004**: CLI MUST securely store authentication credentials using OS keychain when available, falling back to encrypted file storage for headless environments
 - **FR-005**: CLI MUST provide a logout command that removes local credentials
 - **FR-006**: CLI MUST provide a status command that displays current authentication state
 - **FR-007**: CLI MUST communicate with the backend service for token exchange and validation
@@ -121,11 +133,15 @@ A user on a headless server or in an environment where they cannot paste codes w
 - **FR-010**: CLI MUST detect headless/browser-less environments and suggest appropriate auth methods
 - **FR-011**: CLI MUST validate tokens before making authenticated requests
 - **FR-012**: CLI MUST support Device Authorization Flow (RFC 8628) for headless authentication (future enhancement)
+- **FR-013**: CLI MUST support multiple stored accounts with a single active account at a time
+- **FR-014**: CLI MUST provide an account switch command to change the active account
+- **FR-015**: CLI MUST log authentication events at info level (login/logout success/failure) with debug-level details for OAuth flow steps, ensuring no sensitive data (tokens, codes) is logged
 
 ### Key Entities
 
 - **User Session**: Represents an authenticated user's local session, containing identity information and token validity period
-- **Credentials Store**: Local secure storage for authentication tokens, associated with a user identity
+- **Credentials Store**: Local secure storage for multiple account credentials, with one designated as the active account
+- **Stored Account**: A single Google account's credentials including email identifier, tokens, and metadata
 - **Authentication Method**: The chosen approach for completing OAuth (localhost redirect, manual code, or device flow)
 
 ## Success Criteria *(mandatory)*
