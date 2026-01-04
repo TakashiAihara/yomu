@@ -37,8 +37,10 @@ Edit `.env` and set the following:
 #### Google OAuth credentials
 
 1. Go to [Google Cloud Console](https://console.cloud.google.com/apis/credentials)
-2. Create a new OAuth 2.0 Client ID
-3. Set authorized redirect URI: `http://localhost:3000/auth/callback`
+2. Create a new OAuth 2.0 Client ID (Desktop app or Web application)
+3. Add authorized redirect URIs:
+   - For CLI: `http://localhost:8085/callback` through `http://localhost:8099/callback`
+   - For API (optional): `http://localhost:3000/auth/callback`
 4. Copy Client ID and Client Secret to `.env`
 
 ```
@@ -46,6 +48,8 @@ GOOGLE_CLIENT_ID=your-client-id
 GOOGLE_CLIENT_SECRET=your-client-secret
 GOOGLE_REDIRECT_URI=http://localhost:3000/auth/callback
 ```
+
+**Note**: The CLI uses a local callback server on ports 8085-8099. Make sure at least one of these ports is registered in Google Cloud Console.
 
 #### Session secret
 
@@ -83,6 +87,12 @@ pnpm --filter @yomu/api dev
 ```bash
 pnpm --filter @yomu/cli dev -- <command>
 ```
+
+CLI commands:
+- `login` - Sign in with Google OAuth
+- `logout` - Sign out
+- `status` - Show current authentication status
+- `switch` - Switch between accounts
 
 ### Available commands
 
