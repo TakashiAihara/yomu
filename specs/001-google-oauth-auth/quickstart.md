@@ -47,7 +47,7 @@ Before you begin, ensure you have:
 5. Click **Create Credentials > OAuth 2.0 Client ID**
 6. Application type: **Web application**
 7. Add authorized redirect URI:
-   - Development: `http://localhost:3000/auth/callback`
+   - Development: `http://localhost:8085/callback`
    - Production: `https://yourdomain.com/auth/callback`
 8. Save Client ID and Client Secret
 
@@ -57,7 +57,7 @@ Before you begin, ensure you have:
 # .env.local
 GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
 GOOGLE_CLIENT_SECRET=your-client-secret
-GOOGLE_REDIRECT_URI=http://localhost:3000/auth/callback
+GOOGLE_REDIRECT_URI=http://localhost:8085/callback
 
 DATABASE_URL=postgresql://user:password@localhost:5432/yomu
 VALKEY_URL=redis://localhost:6379

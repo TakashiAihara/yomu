@@ -30,7 +30,7 @@ describe('auth.initiateSignIn contract', () => {
     it('should return authUrl as valid Google OAuth URL', async () => {
       const mockOutput = {
         authUrl:
-          'https://accounts.google.com/o/oauth2/v2/auth?client_id=test&redirect_uri=http://localhost:3000/auth/callback&response_type=code&scope=openid%20email%20profile&state=abc123',
+          'https://accounts.google.com/o/oauth2/v2/auth?client_id=test&redirect_uri=http://localhost:8085/callback&response_type=code&scope=openid%20email%20profile&state=abc123',
         state: 'abc123',
       };
 
@@ -42,7 +42,7 @@ describe('auth.initiateSignIn contract', () => {
 
     it('should include required OAuth parameters in authUrl', async () => {
       const mockAuthUrl =
-        'https://accounts.google.com/o/oauth2/v2/auth?client_id=test&redirect_uri=http://localhost:3000/auth/callback&response_type=code&scope=openid%20email%20profile&state=abc123';
+        'https://accounts.google.com/o/oauth2/v2/auth?client_id=test&redirect_uri=http://localhost:8085/callback&response_type=code&scope=openid%20email%20profile&state=abc123';
 
       const url = new URL(mockAuthUrl);
       expect(url.searchParams.get('client_id')).toBeDefined();
