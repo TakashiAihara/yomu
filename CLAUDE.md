@@ -71,3 +71,6 @@ TypeScript (latest stable): Follow standard conventions
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->
+
+## Recent Changes
+- 003-add-bookmark: Added TypeScript (latest stable)

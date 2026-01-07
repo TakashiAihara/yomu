@@ -43,7 +43,7 @@ export async function initiateSignIn(
 
   logger.info('OAuth authorization URL generated', {
     effectiveRedirectUri,
-    authUrl: authUrl.substring(0, 100) + '...',
+    authUrl: `${authUrl.substring(0, 100)}...`,
   });
 
   return {
