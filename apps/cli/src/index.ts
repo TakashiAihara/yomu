@@ -2,6 +2,7 @@
 
 import { Command } from 'commander';
 
+import { bookmarkCommand } from './commands/bookmark.js';
 import { loginCommand } from './commands/login.js';
 import { logoutCommand } from './commands/logout.js';
 import { statusCommand } from './commands/status.js';
@@ -44,5 +45,7 @@ program
   .action(async (email) => {
     await switchCommand(email);
   });
+
+program.addCommand(bookmarkCommand);
 
 program.parse();

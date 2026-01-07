@@ -62,7 +62,9 @@ export type AppRouter = Awaited<ReturnType<typeof createAppRouter>>;
 export async function createAppRouter() {
   // Dynamic import to avoid circular dependency
   const { authRouter } = await import('./auth/presentation/auth-router.js');
+  const { bookmarkRouter } = await import('./bookmarks/presentation/bookmark-router.js');
   return router({
     auth: authRouter,
+    bookmarks: bookmarkRouter,
   });
 }
