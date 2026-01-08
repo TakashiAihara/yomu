@@ -39,8 +39,26 @@ export const sessions = pgTable(
   ]
 );
 
+export const bookmarks = pgTable(
+  'bookmarks',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    url: text('url').notNull(),
+    title: varchar('title', { length: 500 }),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex('unique_user_url').on(table.userId, table.url),
+    index('bookmarks_user_id_created_at_idx').on(table.userId, table.createdAt.desc()),
+  ]
+);
+
 export const usersRelations = relations(users, ({ many }) => ({
   sessions: many(sessions),
+  bookmarks: many(bookmarks),
 }));
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({
@@ -50,7 +68,16 @@ export const sessionsRelations = relations(sessions, ({ one }) => ({
   }),
 }));
 
+export const bookmarksRelations = relations(bookmarks, ({ one }) => ({
+  user: one(users, {
+    fields: [bookmarks.userId],
+    references: [users.id],
+  }),
+}));
+
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type Session = typeof sessions.$inferSelect;
 export type NewSession = typeof sessions.$inferInsert;
+export type Bookmark = typeof bookmarks.$inferSelect;
+export type NewBookmark = typeof bookmarks.$inferInsert;

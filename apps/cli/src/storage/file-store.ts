@@ -79,12 +79,11 @@ export class FileStore implements ICredentialStore {
 
     data.accounts[account.email] = account;
 
-    if (!data.activeAccount) {
-      data.activeAccount = account.email;
-    }
+    // 新しくログインしたアカウントを常にアクティブにする
+    data.activeAccount = account.email;
 
     this.saveData(data);
-    logger.info({ email: account.email }, 'Account saved to encrypted file');
+    logger.info({ email: account.email }, 'Account saved and set as active');
   }
 
   async setActiveAccount(email: string): Promise<void> {

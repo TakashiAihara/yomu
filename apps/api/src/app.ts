@@ -42,7 +42,15 @@ export function createApp() {
     c.set('user', null);
     c.set('sessionId', null);
 
-    const sessionToken = getCookie(c, SESSION_COOKIE_NAME);
+    // Support both cookie and Authorization header
+    let sessionToken = getCookie(c, SESSION_COOKIE_NAME);
+
+    if (!sessionToken) {
+      const authHeader = c.req.header('Authorization');
+      if (authHeader?.startsWith('Bearer ')) {
+        sessionToken = authHeader.substring(7);
+      }
+    }
 
     if (sessionToken) {
       try {
