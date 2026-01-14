@@ -7,3 +7,5 @@ data:
   NODE_ENV: "production"
   PORT: "3000"
   LOG_LEVEL: "info"
+  DATABASE_URL: "postgresql://yomu:yomu@postgres:5432/yomu"
+  VALKEY_URL: "redis://valkey:6379"
