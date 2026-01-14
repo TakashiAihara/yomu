@@ -7,9 +7,24 @@
   - k2 (192.168.0.42): Worker
   - k3 (192.168.0.43): Worker
 - kubectl configured
-- GitHub Actions self-hosted runner
+- ArgoCD installed (see [homelab-k3s](https://github.com/TakashiAihara/homelab-k3s))
 
-## Setup
+## Deployment Options
+
+### Option 1: ArgoCD (Recommended)
+
+```bash
+# Deploy Yomu Application to ArgoCD
+kubectl apply -f k8s/argocd/application.yaml
+
+# ArgoCD will automatically deploy and sync
+```
+
+See [k8s/argocd/README.md](argocd/README.md) for details.
+
+### Option 2: Manual kubectl
+
+## Setup (Manual kubectl)
 
 ### 1. Create Secrets
 
