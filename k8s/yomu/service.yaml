@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: yomu-api
+  namespace: yomu
+  labels:
+    app: yomu-api
+spec:
+  type: ClusterIP
+  selector:
+    app: yomu-api
+  ports:
+  - port: 80
+    targetPort: 3000
+    protocol: TCP
+    name: http

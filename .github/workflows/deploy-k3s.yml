@@ -1,0 +1,53 @@
+name: Deploy to K3s
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    
+    # セキュリティ: mainブランチのみ
+    if: github.ref == 'refs/heads/main'
+    
+    environment:
+      name: production
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Verify K3s connection
+        run: |
+          kubectl get nodes
+          kubectl version --short
+
+      - name: Create namespace
+        run: |
+          kubectl apply -f k8s/namespace.yaml
+
+      - name: Apply ConfigMap
+        run: |
+          kubectl apply -f k8s/yomu/configmap.yaml
+
+      - name: Deploy Yomu API
+        run: |
+          kubectl apply -f k8s/yomu/deployment.yaml
+          kubectl apply -f k8s/yomu/service.yaml
+
+      - name: Wait for deployment
+        run: |
+          kubectl rollout status deployment/yomu-api -n yomu --timeout=5m
+
+      - name: Show deployment status
+        run: |
+          echo "=== Pods ==="
+          kubectl get pods -n yomu
+          echo ""
+          echo "=== Services ==="
+          kubectl get svc -n yomu
+          echo ""
+          echo "=== Deployment ==="
+          kubectl get deployment -n yomu
