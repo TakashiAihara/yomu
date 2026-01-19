@@ -63,8 +63,10 @@ export async function createAppRouter() {
   // Dynamic import to avoid circular dependency
   const { authRouter } = await import('./auth/presentation/auth-router.js');
   const { bookmarkRouter } = await import('./bookmarks/presentation/bookmark-router.js');
+  const { feedRouter } = await import('./feeds/presentation/feed-router.js');
   return router({
     auth: authRouter,
     bookmarks: bookmarkRouter,
+    feeds: feedRouter,
   });
 }
