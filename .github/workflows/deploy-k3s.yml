@@ -14,6 +14,7 @@ jobs:
     
     environment:
       name: production
+      # Manual approval required for production migrations
     
     steps:
       - name: Checkout code
@@ -32,8 +33,44 @@ jobs:
         run: |
           kubectl apply -f k8s/yomu/configmap.yaml
 
-      - name: Deploy Yomu API
+      - name: Run Database Migration
+        id: migration
         run: |
+          # Generate unique Job name with timestamp
+          TIMESTAMP=$(date +%s)
+          JOB_NAME="yomu-migration-${TIMESTAMP}"
+          echo "job_name=${JOB_NAME}" >> $GITHUB_OUTPUT
+          
+          echo "Creating migration Job: ${JOB_NAME}"
+          
+          # Create Job from template with unique name
+          kubectl create -f k8s/yomu/migration-job.yaml \
+            --dry-run=client -o yaml | \
+            sed "s/name: yomu-migration/name: ${JOB_NAME}/" | \
+            kubectl apply -f -
+          
+          # Wait for Job completion (timeout 5 minutes)
+          echo "Waiting for migration to complete..."
+          if kubectl wait --for=condition=complete \
+            --timeout=300s job/${JOB_NAME} -n yomu; then
+            echo "✅ Migration completed successfully"
+          else
+            echo "❌ Migration failed or timed out"
+            kubectl logs job/${JOB_NAME} -n yomu || true
+            exit 1
+          fi
+          
+          # Show migration logs
+          echo "Migration logs:"
+          kubectl logs job/${JOB_NAME} -n yomu
+
+      - name: Deploy Yomu API
+        id: deploy
+        run: |
+          # Store current deployment revision for potential rollback
+          CURRENT_REVISION=$(kubectl rollout history deployment/yomu-api -n yomu --revision=0 | tail -n 1 | awk '{print $1}') || echo "0"
+          echo "current_revision=${CURRENT_REVISION}" >> $GITHUB_OUTPUT
+          
           kubectl apply -f k8s/yomu/deployment.yaml
           kubectl apply -f k8s/yomu/service.yaml
 
@@ -51,3 +88,25 @@ jobs:
           echo ""
           echo "=== Deployment ==="
           kubectl get deployment -n yomu
+
+      - name: Rollback on failure
+        if: failure() && steps.migration.outcome == 'failure'
+        run: |
+          echo "⚠️  Migration failed - initiating rollback"
+          
+          # Get previous revision
+          PREV_REVISION="${{ steps.deploy.outputs.current_revision }}"
+          
+          if [ "${PREV_REVISION}" != "0" ] && [ -n "${PREV_REVISION}" ]; then
+            echo "Rolling back to revision ${PREV_REVISION}"
+            kubectl rollout undo deployment/yomu-api -n yomu --to-revision=${PREV_REVISION}
+            kubectl rollout status deployment/yomu-api -n yomu --timeout=3m
+            echo "✅ Rollback completed"
+          else
+            echo "⚠️  No previous revision found - cannot rollback"
+          fi
+          
+          # Alert (this would integrate with your alerting system)
+          echo "🚨 ALERT: Migration failed in production - deployment blocked and rolled back"
+          echo "Migration Job: ${{ steps.migration.outputs.job_name }}"
+          echo "Check logs: kubectl logs job/${{ steps.migration.outputs.job_name }} -n yomu"

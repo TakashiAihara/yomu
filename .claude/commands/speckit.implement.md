@@ -422,9 +422,34 @@ You **MUST** consider the user input before proceeding (if not empty).
 - Check that implemented features match the original specification
 - Validate that tests pass and coverage meets requirements
 - Confirm the implementation follows the technical plan
+- **Generate implementation_summary.md**: Document completed work, technical decisions made, files changed, pending actions, and verification checklist
 - Report final status with summary of completed work
 - **Next Step**: Suggest running `/speckit.reflect` to analyze implementation
   and create follow-up issues
+
+1. **Create Pull Request** (if on feature branch):
+    - Commit all changes:
+
+      ```bash
+      git add .
+      git commit -m "feat: <brief description from implementation_summary.md>"
+      git push origin <current-branch>
+      ```
+
+    - Create PR to parent branch (usually `main`):
+
+      ```bash
+      gh pr create --title "<PR title from issue/feature>" \
+                   --body "Closes #<issue-number>\n\nSee implementation_summary.md for details" \
+                   --base main
+      ```
+
+    - Link PR to original GitHub issue if applicable
+
+**Output Files**:
+
+- Updated source code files per tasks.md
+- implementation_summary.md - Comprehensive summary of implementation work
 
 Note: This command assumes a complete task breakdown exists in tasks.md. If
 tasks are incomplete or missing, suggest running `/speckit.tasks` first to

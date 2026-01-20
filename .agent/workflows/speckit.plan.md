@@ -22,9 +22,21 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 1. **Setup**: Run `.specify/scripts/bash/setup-plan.sh --json` from repo root and parse JSON for FEATURE_SPEC, IMPL_PLAN, SPECS_DIR, BRANCH. For single quotes in args like "I'm Groot", use escape syntax: e.g 'I'\''m Groot' (or double-quote if possible: "I'm Groot").
 
-2. **Load context**: Read FEATURE_SPEC and `.specify/memory/constitution.md`. Load IMPL_PLAN template (already copied).
+1a. **GitHub Issue Branch** (if issue number provided):
 
-3. **Execute plan workflow**: Follow the structure in IMPL_PLAN template to:
+- If user provided GitHub issue number (e.g., `#114` or `114`), create feature branch:
+
+     ```bash
+     gh issue develop <issue-number>
+     git switch <generated-branch-name>
+     ```
+
+- This creates a branch linked to the GitHub issue
+- All subsequent work will be done on this branch
+
+1. **Load context**: Read FEATURE_SPEC and `.specify/memory/constitution.md`. Load IMPL_PLAN template (already copied).
+
+2. **Execute plan workflow**: Follow the structure in IMPL_PLAN template to:
    - Fill Technical Context (mark unknowns as "NEEDS CLARIFICATION")
    - Fill Constitution Check section from constitution
    - Evaluate gates (ERROR if violations unjustified)
@@ -32,8 +44,9 @@ You **MUST** consider the user input before proceeding (if not empty).
    - Phase 1: Generate data-model.md, contracts/, quickstart.md
    - Phase 1: Update agent context by running the agent script
    - Re-evaluate Constitution Check post-design
+   - **Optional**: Add sequence diagrams in plan.md when helpful for visualizing complex workflows (e.g., K8s Job execution, CI/CD pipelines, multi-service interactions)
 
-4. **Stop and report**: Command ends after Phase 2 planning. Report branch, IMPL_PLAN path, and generated artifacts.
+3. **Stop and report**: Command ends after Phase 2 planning. Report branch, IMPL_PLAN path, and generated artifacts.
 
 ## Phases
 

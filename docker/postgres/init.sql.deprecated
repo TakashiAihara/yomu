@@ -1,3 +1,12 @@
+-- ⚠️ DEPRECATED: This file is no longer used
+-- Database schema is now managed by Drizzle Kit migrations
+-- See: apps/api/src/shared/db/migrate.ts and drizzle/migrations/
+-- Migration workflow: pnpm --filter @yomu/api db:generate && pnpm --filter @yomu/api db:migrate
+--
+-- This file is kept for reference only
+-- Original schema creation date: 2024
+-- Deprecated: 2026-01-19 (migrated to Drizzle Kit)
+
 -- Yomu Database Schema
 -- This script runs automatically when the PostgreSQL container is first created
 

@@ -10,9 +10,8 @@ services:
       - "${POSTGRES_PORT:-5433}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U yomu -d yomu"]
+      test: [ "CMD-SHELL", "pg_isready -U yomu -d yomu" ]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -25,16 +24,33 @@ services:
     volumes:
       - valkey_data:/data
     healthcheck:
-      test: ["CMD", "valkey-cli", "ping"]
+      test: [ "CMD", "valkey-cli", "ping" ]
       interval: 5s
       timeout: 5s
       retries: 5
+
+  # Database migration service (runs once before API)
+  migration:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: yomu-migration
+    working_dir: /app/apps/api
+    command: pnpm db:migrate
+    environment:
+      DATABASE_URL: postgresql://yomu:yomu@postgres:5432/yomu
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no" # Run once and exit
 
   api:
     build:
       context: .
       dockerfile: apps/api/Dockerfile
     container_name: yomu-api
+    working_dir: /app/apps/api
+    command: pnpm start
     ports:
       - "${API_PORT:-3000}:3000"
     environment:
@@ -52,8 +68,10 @@ services:
         condition: service_healthy
       valkey:
         condition: service_healthy
+      migration:
+        condition: service_completed_successfully
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health" ]
       interval: 30s
       timeout: 10s
       start_period: 10s

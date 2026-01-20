@@ -1,0 +1,53 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: yomu-migration
+  namespace: yomu
+  labels:
+    app: yomu-migration
+    component: database
+spec:
+  # Auto-cleanup completed jobs after 5 minutes
+  ttlSecondsAfterFinished: 300
+  
+  # Retry up to 3 times on failure
+  backoffLimit: 3
+  
+  template:
+    metadata:
+      labels:
+        app: yomu-migration
+        component: database
+    spec:
+      restartPolicy: OnFailure
+      
+      containers:
+      - name: migration
+        image: ghcr.io/takashiaihara/yomu-api:latest
+        command: ["pnpm", "db:migrate"]
+        
+        # Environment variables from ConfigMap and Secrets
+        envFrom:
+        - configMapRef:
+            name: yomu-config
+        - secretRef:
+            name: yomu-secrets
+        
+        # Resource limits for migration job
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        
+        # Security context
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          capabilities:
+            drop:
+            - ALL

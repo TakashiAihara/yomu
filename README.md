@@ -23,6 +23,7 @@ docker compose up -d postgres valkey
 ```
 
 This starts:
+
 - PostgreSQL (port 5433)
 - Valkey/Redis (port 6380)
 
@@ -33,6 +34,7 @@ docker compose up -d
 ```
 
 This starts:
+
 - PostgreSQL (port 5433)
 - Valkey/Redis (port 6380)
 - API server (port 3000)
@@ -91,7 +93,7 @@ Start all services with Docker:
 docker compose up -d
 ```
 
-The API is available at http://localhost:3000
+The API is available at <http://localhost:3000>
 
 ### Option 2: Local development
 
@@ -114,6 +116,7 @@ pnpm --filter @yomu/cli dev -- <command>
 ```
 
 CLI commands:
+
 - `login` - Sign in with Google OAuth
 - `logout` - Sign out
 - `status` - Show current authentication status
@@ -130,6 +133,51 @@ CLI commands:
 | `pnpm lint` | Run linter |
 | `pnpm lint:fix` | Fix lint errors |
 | `pnpm typecheck` | Run TypeScript type checking |
+
+## Database Migrations
+
+This project uses [Drizzle Kit](https://orm.drizzle.team/kit-docs/overview) for database schema management and migrations.
+
+### Generate Migration
+
+After modifying the database schema in `apps/api/src/shared/db/schema.ts`:
+
+```bash
+pnpm --filter @yomu/api db:generate
+```
+
+This creates a timestamped SQL migration file in `drizzle/migrations/`.
+
+### Run Migrations
+
+**Local development** (Docker Compose):
+
+```bash
+docker-compose up  # Migrations run automatically on API startup
+```
+
+**Manual execution**:
+
+```bash
+pnpm --filter @yomu/api db:migrate
+```
+
+**Kubernetes deployment**:
+Migrations run automatically via GitHub Actions before application deployment. Manual approval required for production.
+
+### Migration Workflow
+
+1. Modify `apps/api/src/shared/db/schema.ts`
+2. Generate migration: `pnpm --filter @yomu/api db:generate`
+3. Review generated SQL in `drizzle/migrations/`
+4. Test locally with Docker Compose
+5. Commit and push to trigger automated deployment
+
+For detailed migration procedures, rollback strategies, and troubleshooting, see:
+
+- **[Migration Quickstart Guide](specs/114-drizzle-kit-k8s-migration/quickstart.md)**
+- Migration script: `apps/api/src/shared/db/migrate.ts`
+- K8s Job: `k8s/yomu/migration-job.yaml`
 
 ## Project Structure
 
