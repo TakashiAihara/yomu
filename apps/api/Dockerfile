@@ -22,6 +22,9 @@ COPY packages/ ./packages/
 # Build
 RUN pnpm --filter @yomu/api build
 
+# Generate migrations
+RUN pnpm --filter @yomu/api db:generate
+
 # Production stage
 FROM node:22-alpine AS runner
 
@@ -40,9 +43,10 @@ COPY packages/biome-config/package.json ./packages/biome-config/
 RUN pnpm install --frozen-lockfile --prod
 
 # Copy built files
-# Copy built files
 COPY --from=builder /app/apps/api/dist ./apps/api/dist
-COPY drizzle/ ./apps/api/drizzle/
+
+# Copy migration files from builder
+COPY --from=builder /app/drizzle ./apps/api/drizzle/
 
 # Set working directory to api
 WORKDIR /app/apps/api
