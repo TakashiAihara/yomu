@@ -39,8 +39,8 @@ COPY apps/api/package.json ./apps/api/
 COPY packages/tsconfig/package.json ./packages/tsconfig/
 COPY packages/biome-config/package.json ./packages/biome-config/
 
-# Install production dependencies only
-RUN pnpm install --frozen-lockfile --prod
+# Install dependencies (including tsx for migrations)
+RUN pnpm install --frozen-lockfile
 
 # Copy built files
 COPY --from=builder /app/apps/api/dist ./apps/api/dist
