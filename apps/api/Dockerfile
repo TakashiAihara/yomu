@@ -13,9 +13,10 @@ COPY packages/tsconfig/package.json ./packages/tsconfig/
 COPY packages/biome-config/package.json ./packages/biome-config/
 
 # Install dependencies
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --no-frozen-lockfile
 
 # Copy source files
+COPY drizzle.config.ts ./
 COPY apps/api/ ./apps/api/
 COPY packages/ ./packages/
 
@@ -23,7 +24,8 @@ COPY packages/ ./packages/
 RUN pnpm --filter @yomu/api build
 
 # Generate migrations
-RUN pnpm --filter @yomu/api db:generate
+WORKDIR /app
+RUN npx drizzle-kit generate --config ./drizzle.config.ts
 
 # Production stage
 FROM node:22-alpine AS runner
@@ -40,7 +42,7 @@ COPY packages/tsconfig/package.json ./packages/tsconfig/
 COPY packages/biome-config/package.json ./packages/biome-config/
 
 # Install dependencies (including tsx for migrations)
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --no-frozen-lockfile
 
 # Copy built files
 COPY --from=builder /app/apps/api/dist ./apps/api/dist
