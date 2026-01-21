@@ -40,7 +40,9 @@ COPY packages/biome-config/package.json ./packages/biome-config/
 RUN pnpm install --frozen-lockfile --prod
 
 # Copy built files
+# Copy built files
 COPY --from=builder /app/apps/api/dist ./apps/api/dist
+COPY drizzle/ ./apps/api/drizzle/
 
 # Set working directory to api
 WORKDIR /app/apps/api
