@@ -10,8 +10,7 @@ const parser = new XMLParser({
 function resolveLink(links: unknown): string | undefined {
   if (!Array.isArray(links)) return undefined
   const alternate = links.find(
-    (l: { "@_rel"?: string; "@_href"?: string }) =>
-      !l["@_rel"] || l["@_rel"] === "alternate",
+    (l: { "@_rel"?: string; "@_href"?: string }) => !l["@_rel"] || l["@_rel"] === "alternate",
   )
   return alternate?.["@_href"]
 }
@@ -27,9 +26,10 @@ function resolveText(value: unknown): string | undefined {
 }
 
 function resolveContentType(value: unknown): ContentType {
-  const t = typeof value === "object" && value !== null
-    ? (value as { "@_type"?: string })["@_type"]
-    : undefined
+  const t =
+    typeof value === "object" && value !== null
+      ? (value as { "@_type"?: string })["@_type"]
+      : undefined
   if (t === "text" || t === "html" || t === "xhtml") return t
   return "html"
 }

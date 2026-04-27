@@ -9,10 +9,7 @@ export type { Feed, Entry } from "./types.js"
 type Format = "atom" | "rss2" | "jsonfeed" | "rdf"
 
 function detectFormat(contentType: string, body: string): Format {
-  if (
-    contentType.includes("application/feed+json") ||
-    contentType.includes("application/json")
-  ) {
+  if (contentType.includes("application/feed+json") || contentType.includes("application/json")) {
     return "jsonfeed"
   }
   if (contentType.includes("application/rdf+xml")) return "rdf"
@@ -39,9 +36,13 @@ export async function fetchFeed(url: string): Promise<Feed> {
   const format = detectFormat(contentType, body)
 
   switch (format) {
-    case "atom":     return parseAtom(body, url)
-    case "rss2":     return parseRss2(body, url)
-    case "jsonfeed": return parseJsonFeed(body, url)
-    case "rdf":      return parseRdf(body, url)
+    case "atom":
+      return parseAtom(body, url)
+    case "rss2":
+      return parseRss2(body, url)
+    case "jsonfeed":
+      return parseJsonFeed(body, url)
+    case "rdf":
+      return parseRdf(body, url)
   }
 }

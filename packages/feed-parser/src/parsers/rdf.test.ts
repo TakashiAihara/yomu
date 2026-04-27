@@ -12,9 +12,7 @@ describe("parseRdf", () => {
     })
 
     it("<rdf:RDF> がなければ例外を投げる", () => {
-      expect(() => parseRdf("<rss><channel/></rss>", FEED_URL)).toThrow(
-        "Not a valid RDF feed",
-      )
+      expect(() => parseRdf("<rss><channel/></rss>", FEED_URL)).toThrow("Not a valid RDF feed")
     })
   })
 
@@ -31,10 +29,7 @@ describe("parseRdf", () => {
     })
 
     it("dc:date がなければ例外を投げる", () => {
-      const item = buildItem().replace(
-        "<dc:date>2024-01-15T10:00:00Z</dc:date>",
-        "",
-      )
+      const item = buildItem().replace("<dc:date>2024-01-15T10:00:00Z</dc:date>", "")
       expect(() => parseRdf(buildFeed(item), FEED_URL)).toThrow()
     })
 

@@ -19,9 +19,7 @@ describe("parseAtom", () => {
     })
 
     it("<feed> 要素がなければ例外を投げる", () => {
-      expect(() => parseAtom("<rss><channel/></rss>", FEED_URL)).toThrow(
-        "Not a valid Atom feed",
-      )
+      expect(() => parseAtom("<rss><channel/></rss>", FEED_URL)).toThrow("Not a valid Atom feed")
     })
   })
 
@@ -38,10 +36,7 @@ describe("parseAtom", () => {
     })
 
     it("published がなければ updated を publishedAt に使う", () => {
-      const entry = buildEntry().replace(
-        "<published>2024-01-15T10:00:00Z</published>",
-        "",
-      )
+      const entry = buildEntry().replace("<published>2024-01-15T10:00:00Z</published>", "")
       const feed = parseAtom(buildFeed(entry), FEED_URL)
       expect(feed.entries[0].publishedAt).toEqual(new Date("2024-01-16T12:00:00Z"))
     })
@@ -77,9 +72,7 @@ describe("parseAtom", () => {
     })
 
     it('type="html" を正しく取得する', () => {
-      const entry = buildEntry(
-        `<content type="html">&lt;p&gt;html content&lt;/p&gt;</content>`,
-      )
+      const entry = buildEntry(`<content type="html">&lt;p&gt;html content&lt;/p&gt;</content>`)
       const feed = parseAtom(buildFeed(entry), FEED_URL)
       expect(feed.entries[0].contentType).toBe("html")
     })
