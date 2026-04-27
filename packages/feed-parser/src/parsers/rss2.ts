@@ -44,6 +44,7 @@ export function parseRss2(xml: string, feedUrl: string): Feed {
   const entries: Entry[] = (channel.item ?? []).map((item: Record<string, unknown>) => {
     const url = resolveText(item.link)
     if (!url) throw new Error(`Item missing link: ${JSON.stringify(item.guid)}`)
+
     const publishedAt = resolveDate(item.pubDate ?? item["dc:date"])
     if (!publishedAt) throw new Error(`Item missing date: ${url}`)
 

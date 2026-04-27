@@ -55,6 +55,7 @@ export function parseAtom(xml: string, feedUrl: string): Feed {
   const entries: Entry[] = (feed.entry ?? []).map((e: Record<string, unknown>) => {
     const url = resolveLink(e.link)
     if (!url) throw new Error(`Entry missing link: ${JSON.stringify(e.id)}`)
+
     const publishedAt = resolveDate(e.published ?? e.updated)
     if (!publishedAt) throw new Error(`Entry missing date: ${url}`)
 

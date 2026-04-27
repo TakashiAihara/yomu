@@ -41,11 +41,13 @@ export function parseJsonFeed(json: string, feedUrl: string): Feed {
   } catch {
     throw new Error("Not a valid JSON feed")
   }
+
   if (!doc.version?.includes("jsonfeed.org")) throw new Error("Not a valid JSON feed")
 
   const entries: Entry[] = (doc.items ?? []).map((item) => {
     const url = item.url
     if (!url) throw new Error(`Item missing url: ${JSON.stringify(item.id)}`)
+
     const publishedAt = resolveDate(item.date_published)
     if (!publishedAt) throw new Error(`Item missing date_published: ${url}`)
 

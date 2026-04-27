@@ -36,6 +36,7 @@ export function parseRdf(xml: string, feedUrl: string): Feed {
   const entries: Entry[] = items.map((item) => {
     const url = resolveText(item.link) ?? (item["@_rdf:about"] as string | undefined)
     if (!url) throw new Error(`Item missing link: ${JSON.stringify(item.title)}`)
+
     const publishedAt = resolveDate(item["dc:date"])
     if (!publishedAt) throw new Error(`Item missing dc:date: ${url}`)
 

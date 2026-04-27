@@ -9,7 +9,10 @@ export type { Feed, Entry } from "./types.js"
 type Format = "atom" | "rss2" | "jsonfeed" | "rdf"
 
 function detectFormat(contentType: string, body: string): Format {
-  if (contentType.includes("application/feed+json") || contentType.includes("application/json")) {
+  if (
+    contentType.includes("application/feed+json") ||
+    contentType.includes("application/json")
+  ) {
     return "jsonfeed"
   }
   if (contentType.includes("application/rdf+xml")) return "rdf"
