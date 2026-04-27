@@ -3,32 +3,34 @@
   "version": "0.1.0",
   "private": true,
   "description": "Yomu - Reading application with Google OAuth authentication",
-  "packageManager": "pnpm@10.15.0",
-  "engines": {
-    "node": ">=18.0.0"
-  },
+  "keywords": [
+    "google",
+    "hono",
+    "monorepo",
+    "oauth",
+    "reading",
+    "trpc"
+  ],
+  "license": "MIT",
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
     "test": "turbo run test",
     "test:run": "turbo run test:run",
-    "lint": "turbo run lint",
-    "lint:fix": "turbo run lint:fix",
-    "format": "biome format --write .",
+    "lint": "oxlint packages/ --vitest-plugin",
+    "lint:fix": "oxlint packages/ --vitest-plugin --fix",
+    "format": "oxfmt .",
+    "format:check": "oxfmt --check .",
     "typecheck": "turbo run typecheck",
     "clean": "turbo run clean && rm -rf node_modules"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
+    "oxfmt": "^0.47.0",
+    "oxlint": "^1.62.0",
     "turbo": "^2.7.2"
   },
-  "keywords": [
-    "reading",
-    "oauth",
-    "google",
-    "hono",
-    "trpc",
-    "monorepo"
-  ],
-  "license": "MIT"
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "packageManager": "pnpm@10.15.0"
 }

@@ -80,9 +80,7 @@ describe("fetchFeed", () => {
 
     it("未対応フォーマットなら例外を投げる", async () => {
       mockFetch("<html><body/></html>", { contentType: "text/html" })
-      await expect(fetchFeed("https://example.com/")).rejects.toThrow(
-        "Unsupported feed format",
-      )
+      await expect(fetchFeed("https://example.com/")).rejects.toThrow("Unsupported feed format")
     })
   })
 })
