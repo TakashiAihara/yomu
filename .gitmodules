@@ -1,0 +1,3 @@
+[submodule "modules/miniflux"]
+	path = modules/miniflux
+	url = https://github.com/miniflux/v2
