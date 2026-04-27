@@ -35,12 +35,12 @@ describe("parseJsonFeed", () => {
 
     it("url がなければ例外を投げる", () => {
       const item = buildItem({ url: undefined })
-      expect(() => parseJsonFeed(buildFeed([item]), FEED_URL)).toThrow()
+      expect(() => parseJsonFeed(buildFeed([item]), FEED_URL)).toThrow("Item missing url:")
     })
 
     it("date_published がなければ例外を投げる", () => {
       const item = buildItem({ date_published: undefined })
-      expect(() => parseJsonFeed(buildFeed([item]), FEED_URL)).toThrow()
+      expect(() => parseJsonFeed(buildFeed([item]), FEED_URL)).toThrow("Item missing date_published:")
     })
   })
 

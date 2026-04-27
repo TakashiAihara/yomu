@@ -52,14 +52,14 @@ describe("parseAtom", () => {
         `<link rel="alternate" href="https://example.com/posts/1"/>`,
         "",
       )
-      expect(() => parseAtom(buildFeed(entry), FEED_URL)).toThrow()
+      expect(() => parseAtom(buildFeed(entry), FEED_URL)).toThrow("Entry missing link:")
     })
 
     it("date が存在しなければ例外を投げる", () => {
       const entry = buildEntry()
         .replace("<published>2024-01-15T10:00:00Z</published>", "")
         .replace("<updated>2024-01-16T12:00:00Z</updated>", "")
-      expect(() => parseAtom(buildFeed(entry), FEED_URL)).toThrow()
+      expect(() => parseAtom(buildFeed(entry), FEED_URL)).toThrow("Entry missing date:")
     })
   })
 

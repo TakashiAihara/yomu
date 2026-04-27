@@ -4,9 +4,7 @@
   "categories": {
     "correctness": "error"
   },
-  "rules": {
-    "jest/require-to-throw-message": "off"
-  },
+  "rules": {},
   "env": {
     "builtin": true
   },
