@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest"
+import { describe, it, expect } from "bun:test"
 import { parseAtom } from "./atom.js"
 import { FEED_URL, buildEntry, buildFeed } from "../__fixtures__/atom.js"
 
