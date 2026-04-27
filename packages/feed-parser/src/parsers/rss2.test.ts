@@ -43,12 +43,12 @@ describe("parseRss2", () => {
 
     it("link がなければ例外を投げる", () => {
       const item = buildItem().replace("<link>https://example.com/posts/1</link>", "")
-      expect(() => parseRss2(buildFeed(item), FEED_URL)).toThrow()
+      expect(() => parseRss2(buildFeed(item), FEED_URL)).toThrow("Item missing link:")
     })
 
     it("date がなければ例外を投げる", () => {
       const item = buildItem().replace("<pubDate>Mon, 15 Jan 2024 10:00:00 GMT</pubDate>", "")
-      expect(() => parseRss2(buildFeed(item), FEED_URL)).toThrow()
+      expect(() => parseRss2(buildFeed(item), FEED_URL)).toThrow("Item missing date:")
     })
   })
 

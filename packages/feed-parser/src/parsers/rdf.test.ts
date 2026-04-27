@@ -30,7 +30,7 @@ describe("parseRdf", () => {
 
     it("dc:date がなければ例外を投げる", () => {
       const item = buildItem().replace("<dc:date>2024-01-15T10:00:00Z</dc:date>", "")
-      expect(() => parseRdf(buildFeed(item), FEED_URL)).toThrow()
+      expect(() => parseRdf(buildFeed(item), FEED_URL)).toThrow("Item missing dc:date:")
     })
 
     it("tags は常に空配列", () => {
