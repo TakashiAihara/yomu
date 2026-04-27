@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, afterEach } from "vitest"
+import { describe, it, expect, afterEach } from "bun:test"
 import { fetchFeed } from "./index.js"
 import { ATOM_SINGLE_ENTRY } from "./__fixtures__/atom.js"
 import { RSS2_SINGLE_ITEM } from "./__fixtures__/rss2.js"
@@ -6,8 +6,10 @@ import { JSONFEED_SINGLE_ITEM } from "./__fixtures__/jsonfeed.js"
 import { RDF_SINGLE_ITEM } from "./__fixtures__/rdf.js"
 import { mockFetch } from "./test-utils.js"
 
+const originalFetch = globalThis.fetch
+
 afterEach(() => {
-  vi.unstubAllGlobals()
+  globalThis.fetch = originalFetch
 })
 
 describe("fetchFeed", () => {
@@ -67,7 +69,8 @@ describe("fetchFeed", () => {
     it("User-Agent ヘッダを付けてリクエストする", async () => {
       mockFetch(ATOM_SINGLE_ENTRY)
       await fetchFeed("https://example.com/feed.atom")
-      const call = vi.mocked(fetch).mock.calls[0]
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const call = (fetch as any).mock.calls[0]
       expect((call[1] as RequestInit).headers).toMatchObject({
         "User-Agent": expect.stringContaining("Yomu"),
       })

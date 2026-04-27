@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest"
+import { describe, it, expect } from "bun:test"
 import { parseJsonFeed } from "./jsonfeed.js"
 import { FEED_URL, buildItem, buildFeed } from "../__fixtures__/jsonfeed.js"
 
