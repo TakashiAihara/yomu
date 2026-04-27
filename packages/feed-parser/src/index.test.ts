@@ -1,32 +1,7 @@
 import { describe, it, expect, vi, afterEach } from "vitest"
 import { fetchFeed } from "./index.js"
-
-const ATOM_XML = `<?xml version="1.0" encoding="UTF-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Mock Feed</title>
-  <link rel="alternate" href="https://example.com"/>
-  <entry>
-    <id>https://example.com/posts/1</id>
-    <title>Mock Post</title>
-    <link rel="alternate" href="https://example.com/posts/1"/>
-    <published>2024-03-01T00:00:00Z</published>
-    <author><name>Bob</name></author>
-    <content type="html">&lt;p&gt;Hello&lt;/p&gt;</content>
-  </entry>
-</feed>`
-
-function mockFetch(body: string, options: { status?: number; contentType?: string } = {}) {
-  const { status = 200, contentType = "application/atom+xml" } = options
-  vi.stubGlobal(
-    "fetch",
-    vi.fn().mockResolvedValue({
-      ok: status >= 200 && status < 300,
-      status,
-      headers: { get: (key: string) => (key === "content-type" ? contentType : null) },
-      text: () => Promise.resolve(body),
-    }),
-  )
-}
+import { ATOM_SINGLE_ENTRY } from "./__fixtures__/atom.js"
+import { mockFetch } from "./test-utils.js"
 
 afterEach(() => {
   vi.unstubAllGlobals()
@@ -34,9 +9,9 @@ afterEach(() => {
 
 describe("fetchFeed", () => {
   it("Atom フィードを取得してパースする", async () => {
-    mockFetch(ATOM_XML)
+    mockFetch(ATOM_SINGLE_ENTRY)
     const feed = await fetchFeed("https://example.com/feed.atom")
-    expect(feed.title).toBe("Mock Feed")
+    expect(feed.title).toBe("Test Feed")
     expect(feed.entries).toHaveLength(1)
     expect(feed.entries[0].title).toBe("Mock Post")
     expect(feed.entries[0].author).toBe("Bob")
@@ -44,13 +19,13 @@ describe("fetchFeed", () => {
   })
 
   it("content-type が atom でなくても <feed> タグで Atom と判定する", async () => {
-    mockFetch(ATOM_XML, { contentType: "text/xml" })
+    mockFetch(ATOM_SINGLE_ENTRY, { contentType: "text/xml" })
     const feed = await fetchFeed("https://example.com/feed")
-    expect(feed.title).toBe("Mock Feed")
+    expect(feed.title).toBe("Test Feed")
   })
 
   it("User-Agent ヘッダを付けてリクエストする", async () => {
-    mockFetch(ATOM_XML)
+    mockFetch(ATOM_SINGLE_ENTRY)
     await fetchFeed("https://example.com/feed.atom")
     const call = vi.mocked(fetch).mock.calls[0]
     expect((call[1] as RequestInit).headers).toMatchObject({
